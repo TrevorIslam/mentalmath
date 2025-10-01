@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <title>Mental Math</title>
+  <style>
+    :root{color-scheme:light dark}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:#0b1020;color:#e5e7eb;display:flex;align-items:center;justify-content:center}
+    .app{width:100%;max-width:720px;padding:16px}
+    .card{background:#111629;border:1px solid #1f2937;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:16px}
+    h1{margin:0 0 8px;font-size:22px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    label{display:flex;flex-direction:column;gap:6px;font-size:14px}
+    input,select,button{border-radius:10px;border:1px solid #293241;background:#0b1222;color:#e5e7eb;padding:12px 14px}
+    button{cursor:pointer;background:#2563eb;border-color:#1d4ed8}
+    button.secondary{background:#0b1222}
+    .hidden{display:none}
+    .stack{display:flex;flex-direction:column;gap:12px}
+    .spaced{display:flex;justify-content:space-between;align-items:center}
+    .problem{font-size:32px;text-align:center;letter-spacing:1px}
+    .center{display:flex;justify-content:center}
+    .muted{opacity:.7}
+    .history{font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card stack">
+      <h1>🧠 Mental Multiplication</h1>
+      <div id="screen-config" class="stack">
+        <div class="row">
+          <label>Number of problems
+            <input id="numProblems" type="number" min="1" max="200" value="10" inputmode="numeric" />
+          </label>
+          <label>Digits (A × B)
+            <div class="row">
+              <input id="digitsA" type="number" min="1" max="6" value="2" style="width:90px" inputmode="numeric" />
+              <span style="align-self:center">×</span>
+              <input id="digitsB" type="number" min="1" max="6" value="2" style="width:90px" inputmode="numeric" />
+            </div>
+          </label>
+        </div>
+        <div class="row">
+          <label>TTS (read problems aloud)
+            <select id="ttsMode">
+              <option value="off">Off</option>
+              <option value="on">On</option>
+            </select>
+          </label>
+          <label class="muted">Voice (optional)
+            <select id="voiceSelect"></select>
+          </label>
+        </div>
+        <button id="startBtn">Start Session</button>
+      </div>
+
+      <div id="screen-practice" class="stack hidden">
+        <div class="spaced">
+          <div>Problem <span id="progress">1</span>/<span id="total">1</span></div>
+          <div class="muted" id="timer">0.00s</div>
+        </div>
+        <div class="problem" id="problemText">12 × 34</div>
+        <label>Your answer
+          <input id="answer" type="number" inputmode="numeric" autocomplete="one-time-code" />
+        </label>
+        <div class="row">
+          <button id="submitBtn">Submit</button>
+          <button id="skipBtn" class="secondary">Skip</button>
+          <button id="endBtn" class="secondary">End</button>
+        </div>
+      </div>
+
+      <div id="screen-summary" class="stack hidden">
+        <div class="spaced">
+          <h2 style="margin:0">Session Summary</h2>
+          <div>
+            <button id="againBtn">Again</button>
+            <button id="homeBtn" class="secondary">Home</button>
+          </div>
+        </div>
+        <div id="summaryStats" class="history"></div>
+        <details>
+          <summary>Details</summary>
+          <div id="summaryDetails" class="history"></div>
+        </details>
+      </div>
+
+      <details>
+        <summary>History</summary>
+        <div id="history" class="history"></div>
+      </details>
+    </div>
+  </div>
+  <script type="module" src="/main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+  </script>
+</body>
+</html>
+
